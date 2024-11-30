@@ -15,4 +15,9 @@ public class Door : MonoBehaviour
         west = 3
     }
     public Direction direction;
+    public void Open()
+    {
+        open.SetActive(true);
+        closed.SetActive(false);
+    }
 }

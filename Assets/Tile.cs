@@ -17,4 +17,11 @@ public class Tile : MonoBehaviour
             door.tile = this;
         }
     }
+    public void FindGlobalPos()
+    {
+        globalPos = new Vector2Int(
+            (int)Mathf.Round(transform.position.x / LevelGenerator.scale),
+            (int)Mathf.Round(transform.position.z / LevelGenerator.scale)
+            );
+    }
 }
