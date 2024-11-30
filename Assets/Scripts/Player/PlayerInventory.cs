@@ -4,50 +4,47 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    private IPickup heldPickup;
-    private GameObject heldItemObject;
+    public IPickup HeldPickup { get; private set; }
+    private string heldItemName;
 
     public void PickupItem(GameObject item)
     {
-        if (heldPickup == null)
+        if (HeldPickup == null)
         {
             IPickup pickup = item.GetComponent<IPickup>();
             if (pickup != null)
             {
-                heldPickup = pickup;
-                heldItemObject = item;
+                HeldPickup = pickup;
+                heldItemName = item.name;
+
                 Destroy(item);
-                Debug.Log($"Picked up: {item.name}");
+
+                Debug.Log($"Picked up: {heldItemName}");
             }
         }
     }
 
     public void UseItem()
     {
-        if (heldPickup != null && heldItemObject != null)
+        if (HeldPickup != null)
         {
-            Debug.Log($"Attempting to use: {heldItemObject.name}");
-            bool usedSuccessfully = heldPickup.UsePickup(gameObject);
+            bool usedSuccessfully = HeldPickup.UsePickup(gameObject);
 
             if (usedSuccessfully)
             {
-                Debug.Log($"Used: {heldItemObject.name}");
+                Debug.Log($"Used: {heldItemName}");
                 DiscardItem();
-            }
-            else
-            {
-                Debug.Log($"{heldItemObject.name} could not be used.");
             }
         }
     }
 
     public void DiscardItem()
     {
-        if (heldPickup != null && heldItemObject != null)
+        if (HeldPickup != null)
         {
-            Debug.Log($"Discarded: {heldItemObject.name}");
-            heldPickup = null;
-            heldItemObject = null;
+            Debug.Log($"Discarded: {heldItemName}");
+            HeldPickup = null;
+            heldItemName = null;
         }
     }
 }
