@@ -6,7 +6,7 @@ public class Coffee : IPickup
 {
     public bool UsePickup(GameObject player)
     {
-
+        return false;
     }
 
     public void ThrowPickup()
