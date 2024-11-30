@@ -107,7 +107,52 @@ public class LevelGenerator : MonoBehaviour
                     }
                 }
             }
+            if(tile.globalPos.x < lowerBonds.x)
+            {
+                lowerBonds.x = tile.globalPos.x;
+            }
+            if (tile.globalPos.y < lowerBonds.y)
+            {
+                lowerBonds.y = tile.globalPos.y;
+            }
+            if (tile.globalPos.x > upperBonds.x)
+            {
+                upperBonds.x = tile.globalPos.x;
+            }
+            if (tile.globalPos.y > upperBonds.y)
+            {
+                upperBonds.y = tile.globalPos.y;
+            }
         }
         return true;
+    }
+    private void BuildSolidWalls()
+    {
+        for(int x = lowerBonds.x; x < upperBonds.x; x++)
+        {
+            for(int y = lowerBonds.y; y < upperBonds.y; y++)
+            {
+                bool validPos = true;
+                foreach (Room room in existingRooms)
+                {
+                    foreach (Tile otherTile in room.tiles)
+                    {
+                        if (otherTile.globalPos.x == x && otherTile.globalPos.y == y)
+                        {
+                            validPos = false;
+                            break;
+                        }
+                    }
+                    if (!validPos)
+                    {
+                        break;
+                    }
+                }
+                if (!validPos)
+                {
+                    continue;
+                }
+            }
+        }
     }
 }
