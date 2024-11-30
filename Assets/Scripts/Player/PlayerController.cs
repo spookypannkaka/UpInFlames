@@ -8,6 +8,7 @@ public class PlayerController : Singleton<PlayerController>
     private PlayerMovement playerMovement;
     private PlayerInventory playerInventory;
     private Vector2 movement;
+    private PickupObject nearbyPickup;
 
     protected override void Awake()
     {
@@ -41,47 +42,37 @@ public class PlayerController : Singleton<PlayerController>
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
 
         if (playerControls.Interaction.Primary.triggered) {
-            /*if (!playerInventory.heldPickup) {
-                playerInventory.PickupItem();
+            if (playerInventory.HeldPickup == null && nearbyPickup != null) {
+                playerInventory.PickupItem(nearbyPickup.gameObject);
+                nearbyPickup = null;
             } else {
-                // maybe check if you can pick up something
                 playerInventory.UseItem();
-            }*/
+            }
         }
 
         if (playerControls.Interaction.Secondary.triggered) {
-            /*if (playerInventory.heldPickup) {
+            if (playerInventory.HeldPickup != null) {
                 playerInventory.DiscardItem();
-            }*/
+            }
         }
     }
 
-    /*private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        // Check if the object is a pickup trigger
-        if (other.CompareTag("Pickup")) // Assuming the trigger is tagged as "Pickup"
+        PickupObject pickup = other.GetComponentInParent<PickupObject>();
+        if (pickup != null)
         {
-            PickupObject pickup = other.GetComponentInParent<PickupObject>();
-            if (pickup != null)
-            {
-                nearbyPickup = pickup; // Store the nearby pickup reference
-                Debug.Log($"Entered pickup range of: {pickup.itemName}");
-            }
+            nearbyPickup = pickup;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // Clear the reference when leaving the trigger zone
-        if (other.CompareTag("Pickup"))
+        PickupObject pickup = other.GetComponentInParent<PickupObject>();
+        if (pickup != null && pickup == nearbyPickup)
         {
-            PickupObject pickup = other.GetComponentInParent<PickupObject>();
-            if (pickup != null && pickup == nearbyPickup)
-            {
-                nearbyPickup = null;
-                Debug.Log("Left pickup range");
-            }
+            nearbyPickup = null;
         }
-    }*/
+    }
 
 }
