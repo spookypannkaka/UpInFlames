@@ -7,34 +7,47 @@ public class WallVisibilityCheck : MonoBehaviour
 {
     [SerializeField]
     GameObject player;
+
+    private LayerMask layerMask;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        layerMask = LayerMask.GetMask("Wall");
     }
 
     // Update is called once per frame
     void Update()
     {
         SendRayCheck();
-
     }
 
     void SendRayCheck()
     {
         RaycastHit hit;
         Vector3 direction = player.transform.position - transform.position;
-        LayerMask layerMask = LayerMask.GetMask("Wall");
-
+        
+        Debug.DrawRay(transform.position, direction * 10000, Color.red);
         if (Physics.Raycast(transform.position, direction, out hit, layerMask)) 
         {
-            Material[] materials = hit.transform.gameObject.GetComponent<Renderer>().materials;
-            if (materials[0].color.a != 0.25f)
+            //Material[] materials = hit.transform.gameObject.GetComponent<Renderer>().materials;
+
+            if (true)
             {
-                materials[0].SetColor("_Color", new Color(materials[0].color.r, materials[0].color.g, materials[0].color.b, 0.25f));
+                Collider[] hitColliders = Physics.OverlapSphere(hit.transform.position, 0.1f, layerMask);
+                Debug.Log(hitColliders[0].transform.gameObject, hitColliders[1].transform.gameObject);
+                foreach (var hitCollider in hitColliders)
+                {
+                    Material[] materials1 = hitCollider.transform.gameObject.GetComponent<Renderer>().materials;
+                    materials1[0].color = new Color(materials1[0].color.r, materials1[0].color.g, materials1[0].color.b, 0.25f);
+                   
+                }
+
+
+               
             }
             
-            Debug.DrawRay(transform.position, direction * hit.distance, Color.red);
+            //Debug.DrawRay(transform.position, direction * hit.distance, Color.red);
         }
     }
 }
