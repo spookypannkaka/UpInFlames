@@ -12,6 +12,7 @@ public class LevelGenerator : MonoBehaviour
     public int maxAttempts = 100;
     public GameObject outerWallPrefab;
     public GameObject innerWallPrefab;
+    public GameObject upStairs;
     public static Vector2Int[] directions =
     {
         new Vector2Int(1, 0),
@@ -59,15 +60,22 @@ public class LevelGenerator : MonoBehaviour
             return;
         }
         int doorNumber = Random.Range(0, closedDoors.Count-1);
-        int roomPrefabNumber = Random.Range(0, roomPrefabs.Length);
-        Room newRoom = Instantiate(startRoom, this.transform);
+        Room newRoom;
+        if (existingRooms.Count == targetRoomCount - 1)
+        {
+            newRoom = Instantiate(upStairs, this.transform).GetComponent<Room>();
+        }
+        else
+        {
+            int roomPrefabNumber = Random.Range(0, roomPrefabs.Length);
+            newRoom = Instantiate(roomPrefabs[roomPrefabNumber], this.transform);
+        }
         newRoom.InitiateRoom();
         int targetDoorNumber = Random.Range(0, newRoom.doors.Count);
 
         //How many 90 degrees clockwise should we rotate the new room? I hope this formula works.
         int targetRotation = ((int)closedDoors[doorNumber].direction - (int)newRoom.doors[targetDoorNumber].direction + 2) % 4;
         newRoom.RotateRoom(targetRotation);
-        Debug.Log(doorNumber + "/" + closedDoors.Count + ", " + (int)closedDoors[doorNumber].direction);
         Vector3 targetPos = closedDoors[doorNumber].transform.position + new Vector3(
             directions[(int)closedDoors[doorNumber].direction].x * scale,
             0,
