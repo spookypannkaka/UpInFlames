@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 2cfe70a569282a242953e9def2eb64a6
+guid: a8000b004db86bb4eb5f3f72dac32459
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: oil_barrel_texture
+    second: {fileID: 2100000, guid: fe5439e6e5da7004180c9b59efb79484, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
