@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : Singleton<PlayerController>
 {
@@ -9,6 +11,7 @@ public class PlayerController : Singleton<PlayerController>
     private PlayerInventory playerInventory;
     private Vector2 movement;
     private PickupObject nearbyPickup;
+    public int score;
 
     protected override void Awake()
     {
@@ -25,7 +28,10 @@ public class PlayerController : Singleton<PlayerController>
 
     private void OnDisable()
     {
-        playerControls.Disable();
+        if(playerControls != null)
+        {
+            playerControls.Disable();
+        }
     }
 
     void Update()
@@ -73,6 +79,13 @@ public class PlayerController : Singleton<PlayerController>
         {
             nearbyPickup = null;
         }
+    }
+
+    public void ClimbUpStairs()
+    {
+        score++;
+        transform.position = new Vector3(0, 1, 0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 }
