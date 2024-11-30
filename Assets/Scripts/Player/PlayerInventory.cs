@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public IPickup HeldPickup { get; private set; }
-    private string heldItemName;
 
     public void PickupItem(GameObject item)
     {
@@ -15,11 +14,8 @@ public class PlayerInventory : MonoBehaviour
             if (pickup != null)
             {
                 HeldPickup = pickup;
-                heldItemName = item.name;
 
                 Destroy(item);
-
-                Debug.Log($"Picked up: {heldItemName}");
             }
         }
     }
@@ -32,7 +28,6 @@ public class PlayerInventory : MonoBehaviour
 
             if (usedSuccessfully)
             {
-                Debug.Log($"Used: {heldItemName}");
                 DiscardItem();
             }
         }
@@ -42,9 +37,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (HeldPickup != null)
         {
-            Debug.Log($"Discarded: {heldItemName}");
             HeldPickup = null;
-            heldItemName = null;
         }
     }
 }

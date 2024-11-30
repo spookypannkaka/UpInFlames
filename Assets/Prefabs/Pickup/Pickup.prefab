@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behavior: {fileID: 0}
   modelHolder: {fileID: 226373542950118663}
+  glowingMaterial: {fileID: 2100000, guid: f4aeea45d8c520f4c8c516c43a7946e3, type: 2}
 --- !u!1 &5028217575791952566
 GameObject:
   m_ObjectHideFlags: 0
