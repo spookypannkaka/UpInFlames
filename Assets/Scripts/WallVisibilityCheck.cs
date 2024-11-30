@@ -24,8 +24,9 @@ public class WallVisibilityCheck : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 direction = player.transform.position - transform.position;
+        LayerMask layerMask = LayerMask.GetMask("Wall");
 
-        if (Physics.Raycast(transform.position, direction, out hit)) 
+        if (Physics.Raycast(transform.position, direction, out hit, layerMask)) 
         {
             Material[] materials = hit.transform.gameObject.GetComponent<Renderer>().materials;
             if (materials[0].color.a != 0.25f)

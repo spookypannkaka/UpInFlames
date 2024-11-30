@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Coffee : IPickup
 {
-    public void UsePickup()
+    public bool UsePickup(GameObject player)
     {
 
     }

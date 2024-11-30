@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPickup
 {
-    public void UsePickup();
+    public bool UsePickup(GameObject player);
 
     public void ThrowPickup();
 }
