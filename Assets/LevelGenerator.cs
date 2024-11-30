@@ -10,6 +10,8 @@ public class LevelGenerator : MonoBehaviour
     private List<Room> existingRooms;
     public int targetRoomCount = 10;
     public int maxAttempts = 100;
+    public GameObject outerWallPrefab;
+    public GameObject innerWallPrefab;
     public static Vector2Int[] directions =
     {
         new Vector2Int(1, 0),
@@ -37,6 +39,7 @@ public class LevelGenerator : MonoBehaviour
         existingRooms.Add(startRoomInstance);
         TryGenerateRoom();
         GenerateMap();
+        BuildSolidWalls();
     }
 
     private void GenerateMap()
@@ -128,19 +131,28 @@ public class LevelGenerator : MonoBehaviour
     }
     private void BuildSolidWalls()
     {
-        for(int x = lowerBonds.x; x < upperBonds.x; x++)
+        for(int x = lowerBonds.x-1; x <= upperBonds.x+1; x++)
         {
-            for(int y = lowerBonds.y; y < upperBonds.y; y++)
+            for(int y = lowerBonds.y-1; y <= upperBonds.y+1; y++)
             {
                 bool validPos = true;
+                Tile[] neigbors = new Tile[4];
+                Vector2Int thisPos = new Vector2Int(x, y);
                 foreach (Room room in existingRooms)
                 {
                     foreach (Tile otherTile in room.tiles)
                     {
-                        if (otherTile.globalPos.x == x && otherTile.globalPos.y == y)
+                        if (otherTile.globalPos == thisPos)
                         {
                             validPos = false;
                             break;
+                        }
+                        for(int i = 0; i < 4; i++)
+                        {
+                            if (otherTile.globalPos == thisPos + directions[i])
+                            {
+                                neigbors[i] = otherTile;
+                            }
                         }
                     }
                     if (!validPos)
@@ -152,6 +164,10 @@ public class LevelGenerator : MonoBehaviour
                 {
                     continue;
                 }
+                Tile newWall = Instantiate(outerWallPrefab, transform).GetComponent<Tile>();
+                newWall.globalPos = thisPos;
+                newWall.transform.position = new Vector3(thisPos.x * scale, 0, thisPos.y * scale);
+                newWall.neigbors = neigbors;
             }
         }
     }

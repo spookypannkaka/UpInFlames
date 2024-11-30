@@ -171,6 +171,8 @@ MonoBehaviour:
   closedDoors: []
   targetRoomCount: 100
   maxAttempts: 1000
+  outerWallPrefab: {fileID: 4841321508352321750, guid: 8ec7b2cc9b7a83145be85726ea6985f4, type: 3}
+  innerWallPrefab: {fileID: 5036939888780591975, guid: c7b798dd806cc7444ae04cef291fbf30, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
