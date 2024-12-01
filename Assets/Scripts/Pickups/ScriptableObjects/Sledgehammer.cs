@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sledgehammer : MonoBehaviour, IPickup
+[CreateAssetMenu(fileName = "Sledgehammer", menuName = "Pickup/Behaviors/Sledgehammer")]
+public class Sledgehammer : PickupBehavior
 {
     public float range = 0.5f;
 
-    public bool UsePickup(GameObject player)
+    public override bool UsePickup(GameObject player)
     {
         RaycastHit hit;
         Vector3 direction = player.transform.forward;
@@ -21,8 +22,8 @@ public class Sledgehammer : MonoBehaviour, IPickup
         return false; // Used pickup unsuccessfully, should not be "consumed"
     }
 
-    public void ThrowPickup()
-    { 
-    
+    public override void ThrowPickup()
+    {
+        Debug.Log("Sledgehammer discarded.");
     }
 }

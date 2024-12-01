@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class PlayerInventory : MonoBehaviour
     [Header("Rotation Settings")]
     public float rotationSpeed = 20f;
     public float tiltAngle = 10f;
+    [Header("UI Settings")]
+    public TMP_Text instructionText;
+
+    private void Start() {
+        instructionText.text = "";
+    }
 
     private void Update()
     {
@@ -97,6 +104,25 @@ public class PlayerInventory : MonoBehaviour
         foreach (Transform child in obj.transform)
         {
             SetLayerRecursively(child.gameObject, layer);
+        }
+    }
+
+    public void UpdateInstructionText(PickupObject closestPickup, string primaryKey, string secondaryKey)
+    {
+        if (HeldPickup != null)
+        {
+            // Show "Use" and "Throw" instructions
+            instructionText.text = $"[{primaryKey}] Use {HeldPickup.Name}\n[{secondaryKey}] Throw {HeldPickup.Name}";
+        }
+        else if (closestPickup != null)
+        {
+            // Show "Pick up" instruction
+            instructionText.text = $"[{primaryKey}] Pick up {closestPickup.Name}";
+        }
+        else
+        {
+            // Clear the text if no interactions are available
+            instructionText.text = "";
         }
     }
 }

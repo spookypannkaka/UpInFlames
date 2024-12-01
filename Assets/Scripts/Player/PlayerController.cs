@@ -4,6 +4,7 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 public class PlayerController : Singleton<PlayerController>
 {
@@ -56,14 +57,17 @@ public class PlayerController : Singleton<PlayerController>
                 closestPickup.EnableHighlight(false);
                 closestPickup = null;
                 UpdateClosestPickup();
+                playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
             } else {
                 playerInventory.UseItem();
+                playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
             }
         }
 
         if (playerControls.Interaction.Secondary.triggered) {
             if (playerInventory.HeldPickup != null) {
                 playerInventory.DiscardItem();
+                playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
             }
         }
     }
@@ -75,6 +79,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             pickupsInTrigger.Add(pickup);
             UpdateClosestPickup();
+            playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
         }
     }
 
@@ -90,6 +95,7 @@ public class PlayerController : Singleton<PlayerController>
                 closestPickup = null;
             }
             UpdateClosestPickup();
+            playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
         }
     }
 
