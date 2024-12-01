@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Djungelskog\nBl\xE5haj"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 449ab007ab2c81347a8aeee8d407e379, type: 2}
   m_sharedMaterial: {fileID: 4334023676861052509, guid: 449ab007ab2c81347a8aeee8d407e379, type: 2}
