@@ -58,11 +58,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Croc_Move
-      takeName: Croc_Move
+      name: Death
+      takeName: Death
       internalID: -4615009572978466387
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 79
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
