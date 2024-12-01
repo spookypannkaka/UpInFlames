@@ -144,7 +144,7 @@ public class PlayerController : Singleton<PlayerController>
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void Die(float delay = 1.0f)
+    public void Die(float delay = 5.0f)
     {
         StartCoroutine(DieCoroutine(delay));
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -67,5 +68,22 @@ public class PlayerMovement : MonoBehaviour
             Quaternion uprightRotation = Quaternion.Euler(0f, rb.rotation.eulerAngles.y, 0f);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, uprightRotation, correctionSpeed * Time.fixedDeltaTime));
         }
+    }
+
+    public void ApplySpeedBoost(float boostAmount, float duration)
+    {
+        StartCoroutine(SpeedBoostCoroutine(boostAmount, duration));
+    }
+
+    private IEnumerator SpeedBoostCoroutine(float boostAmount, float duration)
+    {
+        float originalSpeed = moveSpeed;
+        moveSpeed += boostAmount; // Increase movement speed
+        Debug.Log($"Speed boosted to {moveSpeed}!");
+
+        yield return new WaitForSeconds(duration);
+
+        moveSpeed = originalSpeed; // Restore original speed
+        Debug.Log("Speed boost ended.");
     }
 }
