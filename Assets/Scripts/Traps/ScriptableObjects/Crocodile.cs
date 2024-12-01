@@ -7,7 +7,9 @@ public class Crocodile : TrapBehavior
 {
     public override bool UseTrap(GameObject player)
     {
-        Debug.Log("USED CROCODILE");
+        // play crocodile animation
+        // timeout
+        player.GetComponent<PlayerController>().Die();
         return true;
     }
 }
