@@ -4,6 +4,7 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 public class PlayerController : Singleton<PlayerController>
 {
@@ -14,6 +15,7 @@ public class PlayerController : Singleton<PlayerController>
     private List<PickupObject> pickupsInTrigger = new List<PickupObject>();
     private PickupObject closestPickup;
     public int score;
+    private bool isStunned = false;
 
     protected override void Awake()
     {
@@ -47,6 +49,12 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void PlayerInput() {
+        if (isStunned)
+        {
+            movement = Vector2.zero;
+            return;
+        }
+
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
 
         if (playerControls.Interaction.Primary.triggered) {
@@ -56,14 +64,17 @@ public class PlayerController : Singleton<PlayerController>
                 closestPickup.EnableHighlight(false);
                 closestPickup = null;
                 UpdateClosestPickup();
+                playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
             } else {
                 playerInventory.UseItem();
+                playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
             }
         }
 
         if (playerControls.Interaction.Secondary.triggered) {
             if (playerInventory.HeldPickup != null) {
                 playerInventory.DiscardItem();
+                playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
             }
         }
     }
@@ -75,6 +86,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             pickupsInTrigger.Add(pickup);
             UpdateClosestPickup();
+            playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
         }
     }
 
@@ -90,6 +102,7 @@ public class PlayerController : Singleton<PlayerController>
                 closestPickup = null;
             }
             UpdateClosestPickup();
+            playerInventory.UpdateInstructionText(closestPickup, playerControls.Interaction.Primary.GetBindingDisplayString(), playerControls.Interaction.Secondary.GetBindingDisplayString());
         }
     }
 
@@ -129,6 +142,49 @@ public class PlayerController : Singleton<PlayerController>
         score++;
         transform.position = new Vector3(0, 1, 0);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Die() {
+        score = 0;
+        transform.position = new Vector3(0, 1, 0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void StunPlayer(float duration)
+    {
+        if (!isStunned)
+        {
+            StartCoroutine(StunCoroutine(duration));
+        }
+    }
+
+    private IEnumerator StunCoroutine(float duration)
+    {
+        isStunned = true;
+
+        // Temporarily disable player movement
+        playerMovement.enabled = false;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            // Freeze the Rigidbody's constraints to prevent external forces
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+        // Wait for the stun duration
+        yield return new WaitForSeconds(duration);
+
+        // Re-enable movement and restore Rigidbody's constraints
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.None;
+            rb.constraints = RigidbodyConstraints.FreezeRotation; // Allow movement but no rotation
+        }
+        playerMovement.enabled = true;
+        isStunned = false;
     }
 
 }
