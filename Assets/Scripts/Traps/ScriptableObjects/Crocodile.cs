@@ -9,6 +9,7 @@ public class Crocodile : TrapBehavior
     {
         // play crocodile animation
         // timeout
+        trap.TriggerAnimation("Snap");
         player.GetComponent<PlayerController>().Die();
         return true;
     }
