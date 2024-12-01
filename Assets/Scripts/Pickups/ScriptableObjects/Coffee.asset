@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Coffee
   m_EditorClassIdentifier: 
   pickupName: Coffee
-  associatedModel: {fileID: 919132149155446097, guid: a8000b004db86bb4eb5f3f72dac32459, type: 3}
+  associatedModel: {fileID: 919132149155446097, guid: 566a8438859a244418911e4ff48e077a, type: 3}
   speedBoost: 2

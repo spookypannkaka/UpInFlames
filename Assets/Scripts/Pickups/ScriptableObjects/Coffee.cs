@@ -4,10 +4,11 @@ using UnityEngine;
 public class Coffee : PickupBehavior
 {
     public float speedBoost = 2f;
+    public float boostDuration = 5f;
 
     public override bool UsePickup(GameObject player)
     {
-        Debug.Log("USED COFFEE");
+        player.GetComponent<PlayerMovement>().ApplySpeedBoost(speedBoost, boostDuration);
         return true;
     }
 
