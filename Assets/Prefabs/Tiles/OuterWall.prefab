@@ -45,10 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe935ba32f265e408d75a4d2db3cdc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neigbors: []
   roomPos: {x: 0, y: 0}
   globalPos: {x: 0, y: 0}
   doors: []
+  flameable: 1
+  fire: {fileID: 8131269146214902179, guid: c8b804a894f277d4582adad8a3ecf8cb, type: 3}
 --- !u!1 &5391581806297871426
 GameObject:
   m_ObjectHideFlags: 0

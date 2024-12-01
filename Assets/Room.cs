@@ -20,51 +20,6 @@ public class Room : MonoBehaviour
                 doors.Add(door);
             }
         }
-
-        // Calculate neighbors
-        foreach (Tile tile in tiles)
-        {
-            tile.neigbors = new Tile[4];
-            foreach (Tile otherTile in tiles)
-            {
-                if(otherTile.roomPos.x == tile.roomPos.x + 1 && otherTile.roomPos.y == tile.roomPos.y)
-                {
-                    // Northen neighbor
-                    if (tile.neigbors[0] != null)
-                    {
-                        Debug.LogError("Wierdness found when calculating north neighbors!", this);
-                    }
-                    tile.neigbors[0] = otherTile;
-                }
-                if (otherTile.roomPos.x == tile.roomPos.x && otherTile.roomPos.y == tile.roomPos.y - 1)
-                {
-                    // Eastern neighbor
-                    if (tile.neigbors[1] != null)
-                    {
-                        Debug.LogError("Wierdness found when calculating east neighbors!", this);
-                    }
-                    tile.neigbors[1] = otherTile;
-                }
-                if (otherTile.roomPos.x == tile.roomPos.x - 1 && otherTile.roomPos.y == tile.roomPos.y)
-                {
-                    // Southern neighbor
-                    if (tile.neigbors[2] != null)
-                    {
-                        Debug.LogError("Wierdness found when calculating south neighbors!", this);
-                    }
-                    tile.neigbors[2] = otherTile;
-                }
-                if (otherTile.roomPos.x == tile.roomPos.x && otherTile.roomPos.y == tile.roomPos.y + 1)
-                {
-                    // Western neighbor
-                    if (tile.neigbors[3] != null)
-                    {
-                        Debug.LogError("Wierdness found when calculating west neighbors!", this);
-                    }
-                    tile.neigbors[3] = otherTile;
-                }
-            }
-        }
     }
 
     public void RotateRoom(int rotation)
