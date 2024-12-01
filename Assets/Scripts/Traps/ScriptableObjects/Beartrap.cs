@@ -7,7 +7,7 @@ public class Beartrap : TrapBehavior
 {
     public override bool UseTrap(GameObject player)
     {
-        Debug.Log("USED BEARTRAP");
+        player.GetComponent<PlayerController>().StunPlayer(1.0f);
         return true;
     }
 }
