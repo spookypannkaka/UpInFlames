@@ -13,6 +13,9 @@ public class LevelGenerator : MonoBehaviour
     public GameObject outerWallPrefab;
     public GameObject innerWallPrefab;
     public GameObject upStairs;
+    private List<Tile> wallTiles;
+    private Tile[][] tiles;
+    public static LevelGenerator instance;
     public static Vector2Int[] directions =
     {
         new Vector2Int(1, 0),
@@ -27,8 +30,10 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         lowerBonds = new Vector2Int(0, 0);
         upperBonds = new Vector2Int(0, 0);
+        wallTiles = new List<Tile>();
         Room startRoomInstance = Instantiate(startRoom, this.transform);
         startRoomInstance.InitiateRoom();
         startRoomInstance.FindGlobalPos();
@@ -41,6 +46,8 @@ public class LevelGenerator : MonoBehaviour
         TryGenerateRoom();
         GenerateMap();
         BuildSolidWalls();
+        CalcNeigbors();
+        FireManager.instance.StartFire(GetTileFromGlobalPos(new Vector2Int(0, 2)));
     }
 
     private void GenerateMap()
@@ -144,7 +151,6 @@ public class LevelGenerator : MonoBehaviour
             for(int y = lowerBonds.y-1; y <= upperBonds.y+1; y++)
             {
                 bool validPos = true;
-                Tile[] neigbors = new Tile[4];
                 Vector2Int thisPos = new Vector2Int(x, y);
                 foreach (Room room in existingRooms)
                 {
@@ -154,13 +160,6 @@ public class LevelGenerator : MonoBehaviour
                         {
                             validPos = false;
                             break;
-                        }
-                        for(int i = 0; i < 4; i++)
-                        {
-                            if (otherTile.globalPos == thisPos + directions[i])
-                            {
-                                neigbors[i] = otherTile;
-                            }
                         }
                     }
                     if (!validPos)
@@ -175,8 +174,62 @@ public class LevelGenerator : MonoBehaviour
                 Tile newWall = Instantiate(outerWallPrefab, transform).GetComponent<Tile>();
                 newWall.globalPos = thisPos;
                 newWall.transform.position = new Vector3(thisPos.x * scale, 0, thisPos.y * scale);
-                newWall.neigbors = neigbors;
+                wallTiles.Add(newWall);
             }
         }
+    }
+    private void CalcNeigbors()
+    {
+        tiles = new Tile[upperBonds.x + 3 - lowerBonds.x][];
+        for(int i = 0; i < tiles.Length; i++)
+        {
+            tiles[i] = new Tile[upperBonds.y + 3 - lowerBonds.y];
+        }
+        foreach (Room room in existingRooms)
+        {
+            foreach (Tile targetTile in room.tiles)
+            {
+                Vector2Int vectorPos = GlobalPosToVectorPos(targetTile.globalPos);
+                tiles[vectorPos.x][vectorPos.y] = targetTile;
+            }
+        }
+        //Debug.Log("Sorting tiles: " + lowerBonds.x + ", " + lowerBonds.y + ": " + upperBonds.x + ", " + upperBonds.y);
+        foreach (Tile targetTile in wallTiles)
+        {
+            Vector2Int vectorPos = GlobalPosToVectorPos(targetTile.globalPos);
+            tiles[vectorPos.x][vectorPos.y] = targetTile;
+        }
+        /*for (int i = 0; i < tiles.Length; i++)
+        {
+            for (int j = 0; j < tiles[i].Length; j++)
+            {
+                Debug.Log(tiles[i][j].globalPos);
+            }
+        }*/
+    }
+    private Vector2Int GlobalPosToVectorPos(Vector2Int input)
+    {
+        return new Vector2Int(input.x - lowerBonds.x + 1, input.y - lowerBonds.y + 1);
+    }
+    public Tile GetTileFromGlobalPos(Vector2Int pos)
+    {
+        Vector2Int targetPos = GlobalPosToVectorPos(pos);
+        if(targetPos.x < 0 || targetPos.y < 0 || targetPos.x >= tiles.Length || targetPos.y >= tiles[0].Length)
+        {
+            return null;
+        }
+        return tiles[targetPos.x][targetPos.y];
+    }
+    public List<Tile> GetNeigbors(Tile tile)
+    {
+        List<Tile> neighbors = new List<Tile>();
+        foreach(Vector2Int direction in directions)
+        {
+            if(GetTileFromGlobalPos(direction + tile.globalPos) != null)
+            {
+                neighbors.Add(GetTileFromGlobalPos(direction + tile.globalPos));
+            }
+        }
+        return neighbors;
     }
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public Tile[] neigbors;
     public Vector2Int roomPos;
     public Vector2Int globalPos;
     public Door[] doors;
+    public bool flameable = true;
+    public GameObject fire;
     // Start is called before the first frame update
     public void InitTile()
     {
@@ -23,5 +24,10 @@ public class Tile : MonoBehaviour
             (int)Mathf.Round(transform.position.x / LevelGenerator.scale),
             (int)Mathf.Round(transform.position.z / LevelGenerator.scale)
             );
+    }
+    public void CatchFire()
+    {
+        flameable = false;
+        Instantiate(fire, this.transform);
     }
 }

@@ -16,6 +16,9 @@ public class PlayerController : Singleton<PlayerController>
     private PickupObject closestPickup;
     public int score;
     private bool isStunned = false;
+    public float startHitpoints = 3;
+    public float hitpoints;
+    private bool isDying = false;
 
     protected override void Awake()
     {
@@ -41,10 +44,12 @@ public class PlayerController : Singleton<PlayerController>
     void Update()
     {
         PlayerInput();
+        CheckFire();
     }
 
     private void FixedUpdate()
     {
+        if (isDying) return;
         playerMovement.Move(movement);
     }
 
@@ -141,27 +146,42 @@ public class PlayerController : Singleton<PlayerController>
     {
         score++;
         transform.position = new Vector3(0, 1, 0);
+        hitpoints = startHitpoints;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Die(float delay = 5.0f)
     {
+        if (isDying) return;
+        isDying = true;
+        playerMovement.enabled = false;
         StartCoroutine(DieCoroutine(delay));
     }
 
     private IEnumerator DieCoroutine(float delay)
     {
-        Debug.Log("Player will die in " + delay + " seconds.");
-
-        playerMovement.enabled = false;
-
         // Wait for the delay duration
         yield return new WaitForSeconds(delay);
 
         // Reset the score and reload the scene
         score = 0;
         transform.position = new Vector3(0, 1, 0);
+        hitpoints = startHitpoints;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        isDying = false;
+    }
+	
+    private void CheckFire()
+    {
+        if(!LevelGenerator.instance.GetTileFromGlobalPos(new Vector2Int((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.y))).flameable)
+        {
+            hitpoints -= Time.deltaTime;
+            if(hitpoints < 0)
+            {
+                Die();
+            }
+        }
     }
 
     public void StunPlayer(float duration)
@@ -195,7 +215,6 @@ public class PlayerController : Singleton<PlayerController>
         if (rb != null)
         {
             rb.constraints = RigidbodyConstraints.None;
-            rb.constraints = RigidbodyConstraints.FreezeRotation; // Allow movement but no rotation
         }
         playerMovement.enabled = true;
         isStunned = false;
