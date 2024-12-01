@@ -9,6 +9,8 @@ public class PickupObject : MonoBehaviour, IPickup
     private Renderer objectRenderer;
     private GameObject instantiatedModel;
 
+    public string Name => behavior != null ? behavior.pickupName : "Unknown";
+
     private void Start()
     {
         AssignRandomBehavior();
