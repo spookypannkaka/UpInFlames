@@ -174,7 +174,7 @@ public class PlayerController : Singleton<PlayerController>
 	
     private void CheckFire()
     {
-        if(!LevelGenerator.instance.GetTileFromGlobalPos(new Vector2Int((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.y))).flameable)
+        if(LevelGenerator.instance != null && !LevelGenerator.instance.GetTileFromGlobalPos(new Vector2Int((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.y))).flameable)
         {
             hitpoints -= Time.deltaTime;
             if(hitpoints < 0)
