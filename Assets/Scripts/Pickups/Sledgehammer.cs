@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sledgehammer : MonoBehaviour, IPickup
+public class Sledgehammer : MonoBehaviour
 {
     public float range = 0.5f;
 
