@@ -16,6 +16,8 @@ public class PlayerController : Singleton<PlayerController>
     private PickupObject closestPickup;
     public int score;
     private bool isStunned = false;
+    public float startHitpoints = 10;
+    public float hitpoints;
 
     protected override void Awake()
     {
@@ -41,6 +43,7 @@ public class PlayerController : Singleton<PlayerController>
     void Update()
     {
         PlayerInput();
+        CheckFire();
     }
 
     private void FixedUpdate()
@@ -141,12 +144,26 @@ public class PlayerController : Singleton<PlayerController>
     {
         score++;
         transform.position = new Vector3(0, 1, 0);
+        hitpoints = startHitpoints;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void CheckFire()
+    {
+        if(!LevelGenerator.instance.GetTileFromGlobalPos(new Vector2Int((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.y))).flameable)
+        {
+            hitpoints -= Time.deltaTime;
+            if(hitpoints < 0)
+            {
+                Die();
+            }
+        }
     }
 
     public void Die() {
         score = 0;
         transform.position = new Vector3(0, 1, 0);
+        hitpoints = startHitpoints;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

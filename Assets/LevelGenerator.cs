@@ -47,7 +47,7 @@ public class LevelGenerator : MonoBehaviour
         GenerateMap();
         BuildSolidWalls();
         CalcNeigbors();
-        FireManager.instance.StartFire(GetTileFromGlobalPos(new Vector2Int(0, 0)));
+        FireManager.instance.StartFire(GetTileFromGlobalPos(new Vector2Int(0, 2)));
     }
 
     private void GenerateMap()
@@ -67,8 +67,16 @@ public class LevelGenerator : MonoBehaviour
             return;
         }
         int doorNumber = Random.Range(0, closedDoors.Count-1);
-        int roomPrefabNumber = Random.Range(0, roomPrefabs.Length);
-        Room newRoom = Instantiate(startRoom, this.transform);
+        Room newRoom;
+        if (existingRooms.Count == targetRoomCount - 1)
+        {
+            newRoom = Instantiate(upStairs, this.transform).GetComponent<Room>();
+        }
+        else
+        {
+            int roomPrefabNumber = Random.Range(0, roomPrefabs.Length);
+            newRoom = Instantiate(roomPrefabs[roomPrefabNumber], this.transform);
+        }
         newRoom.InitiateRoom();
         int targetDoorNumber = Random.Range(0, newRoom.doors.Count);
 
