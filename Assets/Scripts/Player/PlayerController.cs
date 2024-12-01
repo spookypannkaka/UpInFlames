@@ -146,15 +146,12 @@ public class PlayerController : Singleton<PlayerController>
 
     public void Die(float delay = 5.0f)
     {
+        playerMovement.enabled = false;
         StartCoroutine(DieCoroutine(delay));
     }
 
     private IEnumerator DieCoroutine(float delay)
     {
-        Debug.Log("Player will die in " + delay + " seconds.");
-
-        playerMovement.enabled = false;
-
         // Wait for the delay duration
         yield return new WaitForSeconds(delay);
 
