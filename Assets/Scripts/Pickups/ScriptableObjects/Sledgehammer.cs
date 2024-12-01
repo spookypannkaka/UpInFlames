@@ -9,17 +9,16 @@ public class Sledgehammer : PickupBehavior
 
     public override bool UsePickup(GameObject player)
     {
-        RaycastHit hit;
         Vector3 direction = player.transform.forward;
         LayerMask layerMask = LayerMask.GetMask("Wall");
 
-        if (Physics.Raycast(player.transform.position, direction, out hit, range, layerMask))
+        Collider[] hitColliders = Physics.OverlapSphere(player.transform.position, 0.5f, layerMask);
+        foreach (var hitCollider in hitColliders)
         {
-            Destroy(hit.transform.gameObject);
-            return true; // Used pickup successfully
+            Destroy(hitCollider.transform.gameObject);
         }
 
-        return false; // Used pickup unsuccessfully, should not be "consumed"
+        return true;
     }
 
     public override void ThrowPickup()
