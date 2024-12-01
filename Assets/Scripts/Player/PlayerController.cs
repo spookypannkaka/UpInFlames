@@ -144,7 +144,21 @@ public class PlayerController : Singleton<PlayerController>
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void Die() {
+    public void Die(float delay = 1.0f)
+    {
+        StartCoroutine(DieCoroutine(delay));
+    }
+
+    private IEnumerator DieCoroutine(float delay)
+    {
+        Debug.Log("Player will die in " + delay + " seconds.");
+
+        playerMovement.enabled = false;
+
+        // Wait for the delay duration
+        yield return new WaitForSeconds(delay);
+
+        // Reset the score and reload the scene
         score = 0;
         transform.position = new Vector3(0, 1, 0);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

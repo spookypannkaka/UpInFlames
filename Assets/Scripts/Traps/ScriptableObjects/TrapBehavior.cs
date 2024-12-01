@@ -8,7 +8,7 @@ public class TrapBehavior : ScriptableObject
     public string trapName;
     public GameObject associatedModel;
 
-    public virtual bool UseTrap(GameObject player)
+    public virtual bool UseTrap(GameObject player, TrapObject trap)
     {
         Debug.Log($"{trapName} used.");
         return true;
