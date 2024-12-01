@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
@@ -174,7 +173,7 @@ public class PlayerController : Singleton<PlayerController>
 	
     private void CheckFire()
     {
-        if(LevelGenerator.instance != null && !LevelGenerator.instance.GetTileFromGlobalPos(new Vector2Int((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.y))).flameable)
+        if(LevelGenerator.instance != null && !LevelGenerator.instance.GetTileFromGlobalPos(new Vector2Int((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.z))).flameable)
         {
             hitpoints -= Time.deltaTime;
             if(hitpoints < 0)
