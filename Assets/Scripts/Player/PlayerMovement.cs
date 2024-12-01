@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 10f;
 
     [Header("Rotation Settings")]
+    [Tooltip("How fast the player rotates towards movement direction.")]
+    public float rotationSpeed = 10f;
     [Tooltip("How much the player tilts while moving.")]
     public float tiltIntensity = 10f;
     [Tooltip("Speed at which the player corrects to upright.")]
@@ -32,6 +34,14 @@ public class PlayerMovement : MonoBehaviour
         if (horizontalVelocity.magnitude > maxSpeed)
         {
             rb.velocity = horizontalVelocity.normalized * maxSpeed + new Vector3(0f, rb.velocity.y, 0f);
+        }
+        if (horizontalVelocity.sqrMagnitude > 0.01f)
+        {
+            // Calculate the target rotation based on velocity direction
+            Quaternion targetRotation = Quaternion.LookRotation(horizontalVelocity, Vector3.up);
+
+            // Smoothly rotate towards the target direction
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
         }
 
         rb.velocity = new Vector3(rb.velocity.x * (1f - drag * Time.fixedDeltaTime),
