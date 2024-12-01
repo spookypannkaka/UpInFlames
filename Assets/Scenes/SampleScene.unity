@@ -314,6 +314,8 @@ MonoBehaviour:
   - {fileID: 8330169125354929832, guid: c6296c870859c0e4b9829547b74113fe, type: 3}
   - {fileID: 8330169125354929832, guid: 143462b1541df5b4caafdc67e60dfa2f, type: 3}
   - {fileID: 8330169125354929832, guid: 56d6d4ad58d649d489319305cccd5094, type: 3}
+  - {fileID: 8330169125354929832, guid: 3403c1bc5ecbadd4ebb76405999c987c, type: 3}
+  - {fileID: 8330169125354929832, guid: 21817f2057a94504b8f1d003ff476c33, type: 3}
   startRoom: {fileID: 8330169125354929832, guid: 350f72804d11c0146a0cb0f12a46882c, type: 3}
   closedDoors: []
   targetRoomCount: 10

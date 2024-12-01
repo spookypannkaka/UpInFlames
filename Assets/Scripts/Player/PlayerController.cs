@@ -16,8 +16,9 @@ public class PlayerController : Singleton<PlayerController>
     private PickupObject closestPickup;
     public int score;
     private bool isStunned = false;
-    public float startHitpoints = 10;
+    public float startHitpoints = 3;
     public float hitpoints;
+    private bool isDying = false;
 
     protected override void Awake()
     {
@@ -48,6 +49,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void FixedUpdate()
     {
+        if (isDying) return;
         playerMovement.Move(movement);
     }
 
@@ -150,15 +152,14 @@ public class PlayerController : Singleton<PlayerController>
 
     public void Die(float delay = 5.0f)
     {
+        if (isDying) return;
+        isDying = true;
+        playerMovement.enabled = false;
         StartCoroutine(DieCoroutine(delay));
     }
 
     private IEnumerator DieCoroutine(float delay)
     {
-        Debug.Log("Player will die in " + delay + " seconds.");
-
-        playerMovement.enabled = false;
-
         // Wait for the delay duration
         yield return new WaitForSeconds(delay);
 
@@ -167,6 +168,8 @@ public class PlayerController : Singleton<PlayerController>
         transform.position = new Vector3(0, 1, 0);
         hitpoints = startHitpoints;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        isDying = false;
     }
 	
     private void CheckFire()
@@ -212,7 +215,6 @@ public class PlayerController : Singleton<PlayerController>
         if (rb != null)
         {
             rb.constraints = RigidbodyConstraints.None;
-            rb.constraints = RigidbodyConstraints.FreezeRotation; // Allow movement but no rotation
         }
         playerMovement.enabled = true;
         isStunned = false;
