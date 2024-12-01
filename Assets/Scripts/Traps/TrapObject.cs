@@ -5,6 +5,8 @@ using UnityEngine;
 public class TrapObject : MonoBehaviour, ITrap
 {
     public TrapBehavior behavior;
+    private Animator animator;
+    private bool isActive = true; // Tracks if the trap is currently active
 
     private void Start()
     {
@@ -13,6 +15,7 @@ public class TrapObject : MonoBehaviour, ITrap
         {
             AssignBehaviorFromPrefabName();
         }
+        animator = GetComponent<Animator>();
     }
 
     private void AssignBehaviorFromPrefabName()
@@ -31,14 +34,46 @@ public class TrapObject : MonoBehaviour, ITrap
         }
     }
 
+    public void TriggerAnimation(string triggerName)
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(triggerName);
+        }
+        else
+        {
+            Debug.LogWarning($"Animator not found on {gameObject.name}!");
+        }
+    }
+
     public bool UseTrap(GameObject player)
     {
+        if (!isActive) return false;
+
         if (behavior != null)
         {
-            return behavior.UseTrap(player);
+            bool activated = behavior.UseTrap(player, this);
+            if (activated)
+            {
+                StartCooldown(2.0f);
+            }
+            return activated;
         }
         Debug.LogWarning("No behavior assigned to this trap.");
         return false;
+    }
+
+    private void StartCooldown(float duration)
+    {
+        StartCoroutine(CooldownCoroutine(duration));
+    }
+
+    private IEnumerator CooldownCoroutine(float duration) {
+        isActive = false;
+
+        yield return new WaitForSeconds(duration);
+
+        isActive = true;
     }
 
     private void OnCollisionEnter(Collision collision)

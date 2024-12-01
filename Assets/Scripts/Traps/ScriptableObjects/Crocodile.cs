@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Crocodile", menuName = "Traps/Behaviors/Crocodile")]
 public class Crocodile : TrapBehavior
 {
-    public override bool UseTrap(GameObject player)
+    public override bool UseTrap(GameObject player, TrapObject trap)
     {
         // play crocodile animation
         // timeout
